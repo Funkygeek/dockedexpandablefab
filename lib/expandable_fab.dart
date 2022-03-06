@@ -17,20 +17,21 @@ class ExpandableFab extends StatefulWidget {
   _ExpandableFabState createState() => _ExpandableFabState();
 }
 
+
+
 class _ExpandableFabState extends State<ExpandableFab>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _expandAnimation;
   bool _open = false;
 
-  OverlayEntry _overlayEntry;
+
 
 
   @override
   void initState() {
     super.initState();
-    this._overlayEntry = this._createOverlayEntry();
-    Overlay.of(context).insert(this._overlayEntry);
+
 
     _open = widget.initialOpen ?? false;
     _controller = AnimationController(
@@ -45,16 +46,6 @@ class _ExpandableFabState extends State<ExpandableFab>
     );
   }
 
-  OverlayEntry _createOverlayEntry() {
-
-
-    RenderBox? renderBox = context.findRenderObject() as RenderBox?;
-    var size = renderBox?.size;
-    var offset = renderBox?.localToGlobal(Offset.zero);
-    return OverlayEntry(
-
-    );
-  }
 
   @override
   void dispose() {
@@ -72,6 +63,7 @@ class _ExpandableFabState extends State<ExpandableFab>
       }
     });
   }
+
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import './tabbar_material_widget.dart';
-import './expandable_fab.dart';
+
+import 'anchored_overalay.dart';
+import 'fab_with_icons.dart';
 
 
 void main() {
@@ -31,7 +33,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String _lastSelected = 'TAB: 0';
 
+  void _selectedFab(int index) {
+    setState(() {
+      _lastSelected = 'FAB: $index';
+    });
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -56,41 +64,32 @@ class _MyHomePageState extends State<MyHomePage> {
       bottomNavigationBar: const TabBarMaterialWidget(),
      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
-      floatingActionButton: ExpandableFab(
-        distance: 112.0,
-        children: [
-          ActionButton(
-            onPressed: () => _showAction(context, "0","0"),
-            icon: const Icon(Icons.format_size),
-          ),
-          ActionButton(
-            onPressed: () => _showAction(context, "1","1"),
-            icon: const Icon(Icons.insert_photo),
-          ),
-          ActionButton(
-            onPressed: () => _showAction(context, "2","2"),
-            icon: const Icon(Icons.videocam),
-          ),
-        ],
-      ),
+      floatingActionButton:   _buildFab(context),
+
     );
   }
 
-  void _showAction(BuildContext context, String title, String content) {
-    showDialog<void>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(content),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('CLOSE'),
-            ),
-          ],
-        );
-      },
-    );
-  }
+
+
+Widget _buildFab(BuildContext context) {
+  final icons = [ Icons.sms, Icons.mail, Icons.phone ];
+  return AnchoredOverlay(
+    showOverlay: true,
+    overlayBuilder: (context, offset) {
+      return CenterAbout(
+        position: Offset(offset.dx, offset.dy - icons.length * 35.0),
+        child: FabWithIcons(
+          icons: icons,
+          onIconTapped: _selectedFab,
+        ),
+      );
+    },
+    child: FloatingActionButton(
+      onPressed: () { },
+      tooltip: 'Increment',
+      child: Icon(Icons.add),
+      elevation: 2.0,
+    ),
+  );
+}
 }
